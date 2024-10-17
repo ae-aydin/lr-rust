@@ -1,6 +1,6 @@
 # lr-rust
 
-A Rust implementation of a logistic regression model with gradient clipping and weight initialization techniques, using the [Breast Cancer Wisconsin Diagnostic dataset](https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic) from the UCI Machine Learning Repository for testing.
+A Rust implementation of a logistic regression model with L2 regularization and weight initialization techniques, using the [Breast Cancer Wisconsin Diagnostic dataset](https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic) from the UCI Machine Learning Repository for testing.
 
 
 ## Setup

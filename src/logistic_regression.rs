@@ -8,10 +8,11 @@ pub fn sigmoid(z: Array2<f64>) -> Array2<f64> {
 
 pub struct LogisticRegression {
     learning_rate: f64,
-    n_iters: i32,
-    eps: f64,
-    w: Array2<f64>,
-    b: f64
+    n_iters: i32, // number of iterations (epochs)
+    c: f64, // regularization strength
+    eps: f64, // clamping threshold
+    w: Array2<f64>, // weights
+    b: f64 // bias
 }
 
 impl LogisticRegression {
@@ -19,8 +20,9 @@ impl LogisticRegression {
         LogisticRegression {
             learning_rate: 0.01,
             n_iters: 200,
+            c: 1.0,
             eps: 1e-12,
-            w: Array2::zeros((1, 1)),
+            w: Array2::zeros((1, 1)), // temporary initialization
             b: 0.0
         }
     }
@@ -29,8 +31,9 @@ impl LogisticRegression {
         LogisticRegression {
             learning_rate,
             n_iters,
+            c: 1.0,
             eps: 1e-12,
-            w: Array2::zeros((1, 1)),
+            w: Array2::zeros((1, 1)), // temporary initialization
             b: 0.0
         }
     }
@@ -56,7 +59,7 @@ impl LogisticRegression {
 
         for i in 1..self.n_iters + 1 {
             let a = self.forward(x);
-            // Clipping
+            // Clamping
             let a = a.mapv(|x| x.max(self.eps).min(1.0 - self.eps));
 
             // let current_loss: f64 = self.calculate_loss(y, &a);
@@ -64,7 +67,8 @@ impl LogisticRegression {
 
             let a_y: Array2<f64> = a - y;
             let num_samples = x.shape()[0] as f64;
-            let dw: Array2<f64> = x.t().dot(&a_y) / num_samples + (0.01 / num_samples) * &self.w;
+            // L2 Regularization
+            let dw: Array2<f64> = x.t().dot(&a_y) / num_samples + (self.c / num_samples) * &self.w;
             let db: f64 = a_y.mean().unwrap();
 
             self.w = &self.w - self.learning_rate * dw;
